@@ -1,0 +1,19 @@
+.footer {
+    position: fixed;
+    bottom: 0px;
+    /* background-color: #3498db; */
+    background-color: #2d3436;
+    height: 30px;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.footer h4 {
+    display: flex;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #ecf0f1;
+    font-size: 1rem;
+    margin-top: 10px;
+    font-style: oblique;
+}

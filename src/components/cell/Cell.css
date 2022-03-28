@@ -1,0 +1,39 @@
+.cell {
+    animation-duration: 0.9s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 1rem;
+    border-color: #7f8c8d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+p {
+    font-weight: 900;
+}
+
+.cell .active {
+    border-color: #161bb0;
+}
+
+.cell .swap {
+    border-color: #9b59b6;
+}
+
+.cell .access {
+    border-color: #2ecc71;
+}
+
+.bounce-2 {
+    animation-name: bounce-2;
+    animation-timing-function: ease;
+}
+@keyframes bounce-2 {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-100px); }
+    100% { transform: translateY(0); }
+}

@@ -1,0 +1,20 @@
+div {
+    justify-content: left;
+    align-items: left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#algorithms { 
+    height: 30px;
+    width: 200px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h3 {
+    text-align: left;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 20px;
+    color: #0984e3;
+    font-weight: 300;
+}

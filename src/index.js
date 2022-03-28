@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import SortingVisualizer from './SortingVisualizer';
+import DPVisualizer from './DPVisualizer';
+import Footer from "./components/footer/Footer";
+import Nav from "./components/nav/Nav";
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Nav />
+    {/* <SortingVisualizer /> */}
+    <DPVisualizer />
+    <Footer />
   </React.StrictMode>,
   document.getElementById('root')
 );
