@@ -24,7 +24,7 @@ export default class DPVisualizer extends React.Component {
             maxDepth: 0,
         }
         this.gapCost = 1;
-        this.fps = 1;
+        this.fps = 5;
         this.fpsInterval = 1000 / this.fps;
     }
 
@@ -112,12 +112,19 @@ export default class DPVisualizer extends React.Component {
                 if (A[i + 1][j + 1].weight == pathOne) {
                     A[i + 1][j + 1].ref.current.toggleSwap();
                     A[i][j].ref.current.toggleSwap();
+                    toReset.push(A[i + 1][j + 1]);
+                    toReset.push(A[i][j]);
+                } else if (A[i + 1][j + 1].weight == pathTwo) {
+                    A[i + 1][j + 1].ref.current.toggleSwap();
+                    A[i][j + 1].ref.current.toggleSwap();
+                    toReset.push(A[i + 1][j + 1]);
+                    toReset.push(A[i][j + 1]);      
                 } else {
-                    A[i + 1][j + 1].ref.current.toggleActive();
-                    A[i][j].ref.current.toggleActive();
+                    A[i + 1][j + 1].ref.current.toggleSwap();
+                    A[i + 1][j].ref.current.toggleSwap();
+                    toReset.push(A[i + 1][j + 1]);
+                    toReset.push(A[i + 1][j]);   
                 }
-                toReset.push(A[i + 1][j + 1]);
-                toReset.push(A[i][j]);
                 window.requestAnimationFrame(() => { this.getAlignmentMinEditDistance(X, Y, ccm, A, this.gapCost, j, i + 1, false, toReset, timeThen) })
             }
         }
@@ -131,7 +138,7 @@ export default class DPVisualizer extends React.Component {
             window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, i + 1, 0) })
         } else {
             const depth = ccm[i][j].depth;
-            const color = this.getDepthHexColor(depth, this.state.maxDepth);
+            const color = this.getDepthHexColor(depth, this.state.maxDepth + 1);
             // alert("Called animate ccm: " + color)
             ccm[i][j].ref.current.setStateBg(color);
             window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, i, j + 1) })
@@ -149,6 +156,15 @@ export default class DPVisualizer extends React.Component {
         if (c === 'i') return 2;
         if (c === 'o') return 3;
         if (c === 'u') return 4;
+        return -1;
+    }
+
+    getCCMVal(idx) {
+        if (idx === 0) return 'a';
+        if (idx === 1) return 'e';
+        if (idx === 2) return 'i';
+        if (idx === 3) return 'o';
+        if (idx === 4) return 'u';
         return -1;
     }
 

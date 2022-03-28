@@ -9,7 +9,8 @@ export default class Cell extends React.Component {
             active: false,
             swap: false,
             access: false,
-            stateBg: ""
+            stateBg: "",
+            val: null,
         }
     }
 
@@ -28,7 +29,7 @@ export default class Cell extends React.Component {
             bgColor = this.state.stateBg;
         }
         return (
-            <div className={'cell'} style={{width: this.props.width, height: this.props.height, backgroundColor: bgColor}}><p>{this.props.weight}</p></div>
+            <div className={'cell'} style={{width: this.props.width, height: this.props.height, backgroundColor: bgColor}}><p>{this.props.weight}</p><p>{this.state.val}</p></div>
         );
     }
 
