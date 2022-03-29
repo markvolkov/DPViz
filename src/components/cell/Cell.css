@@ -12,8 +12,18 @@
     margin: 10px;
 }
 
+.div {
+    /* display: flex;
+    justify-content: center;
+    align-items: center;; */
+}
+
 p {
     font-weight: 900;
+}
+
+p span {
+    display: block;
 }
 
 .cell .active {

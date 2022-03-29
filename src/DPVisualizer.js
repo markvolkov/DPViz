@@ -44,7 +44,7 @@ export default class DPVisualizer extends React.Component {
          //todo: convert loop to be recursive so I can use request animation frame
         // Used to cancel our animation frame when we finish algo: window.cancelAnimationFrame(this);
         this.generateCells();
-        this.generateDPArrayCells(this.state.x.length + 1, this.state.y.length + 1);
+        this.generateDPArrayCells(this.state.x, this.state.y);
         window.requestAnimationFrame(() => { this.getAlignmentMinEditDistance(this.state.x, this.state.y, this.state.ccmArr, this.state.dpArr, this.gapCost, 0, 0, true, [], Date.now()) })
     }
 
@@ -131,17 +131,18 @@ export default class DPVisualizer extends React.Component {
     }
 
     //todo: fix 2d sorting array based on depth
+    //TODO: Investigate why i and j are swapped with requesting animation frame, I'm most likely doing something very very very stupid lol
     colorCCMDepthAnimated(ccm, i, j) {
         if (i >= ccm.length) {
-            window.cancelAnimationFrame(this);
+            window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, 0, j + 1) })
         } else if (j >= ccm[i].length) {
-            window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, i + 1, 0) })
+            window.cancelAnimationFrame(this);
         } else {
             const depth = ccm[i][j].depth;
             const color = this.getDepthHexColor(depth, this.state.maxDepth + 1);
             // alert("Called animate ccm: " + color)
             ccm[i][j].ref.current.setStateBg(color);
-            window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, i, j + 1) })
+            window.requestAnimationFrame(() => { this.colorCCMDepthAnimated(ccm, i + 1, j) })
         }
     }
 
@@ -241,9 +242,15 @@ export default class DPVisualizer extends React.Component {
                 const background = 'black';
                 const weight = this.ccm[i][j];
                 const ref = React.createRef();
+                const value = i == 0 ? this.getCCMVal(j) : this.getCCMVal(i);
                 const depth = 0;
-                cells[i].push({ width, height, background, weight, ref, depth});
-            }
+                if (i == 0 || j == 0) {
+                    console.log(i + " , " + j + " " + value); 
+                    cells[i].push({ width, height, background, weight, ref, depth, value});
+                } else {
+                    cells[i].push({ width, height, background, weight, ref, depth});
+                }
+            } 
         }
         this.setState({ ccmArr: cells });
     }
@@ -254,16 +261,21 @@ export default class DPVisualizer extends React.Component {
             cells = [];
             // this.setState({ dpArr: cells });
         }
-        for (let i = 0; i < X; i++) {
+        for (let i = 0; i < X.length + 1; i++) {
             cells.push([]);
-            for (let j = 0; j < Y; j++) {
+            for (let j = 0; j < Y.length + 1; j++) {
                 const width = 50;
                 const height = 50;
                 // const background = '#bdc3c7';
                 const background = 'black';
                 const weight = 0;
                 const ref = React.createRef();
-                cells[i].push({ width, height, background, weight, ref });
+                const value = i == 0 ? Y.charAt(j) : X.charAt(i);
+                if (i == 0 && j != 0) {
+                    cells[i].push({ width, height, background, weight, ref, value });
+                } else {
+                    cells[i].push({ width, height, background, weight, ref });
+                }
             }
         }
         this.setState({ dpArr: cells });
@@ -332,7 +344,7 @@ export default class DPVisualizer extends React.Component {
                     </div>
                 </div>
                 <div className='panel'>
-                    <h1 style={{ textAlign: 'center', color: 'white' }}>Character Cost Matrix</h1>
+                    <h1 style={{ textAlign: 'center', color: 'black' }}>Character Cost Matrix</h1>
                     <div className='cell-container'>
                     {
                         //renders our ccm array for seeing swaps while we access our dp array and make compares
@@ -342,8 +354,7 @@ export default class DPVisualizer extends React.Component {
                                 <div>
                                     {
                                         inner.map((cell, idx) => {
-                                            // console.log(cell);
-                                            let component = <Cell ref={cells[j][idx].ref} key={idx} height={cell.height} width={cell.width} weight={cell.weight} backgroundColor={cell.background} />
+                                            let component = <Cell ref={cells[j][idx].ref} key={idx} height={cell.height} width={cell.width} weight={cell.weight} val={cell.value} backgroundColor={cell.background} />
                                             return component;
                                         })
                                     }
@@ -355,7 +366,7 @@ export default class DPVisualizer extends React.Component {
                 </div>
                 </div>
                 <div className='panel'>
-                <h1 style={{ textAlign: 'center', color: 'white' }}>DP Access</h1>
+                <h1 style={{ textAlign: 'center', color: 'black' }}>DP Access</h1>
                     <div className='cell-container'>
                     {
                         //renders our ccm array for seeing swaps while we access our dp array and make compares
@@ -366,7 +377,7 @@ export default class DPVisualizer extends React.Component {
                                     {
                                         inner.map((cell, idx) => {
                                             // console.log(cell);
-                                            let component = <Cell ref={memory[j][idx].ref} key={idx} height={cell.height} width={cell.width} weight={cell.weight} backgroundColor={cell.background} />
+                                            let component = <Cell ref={memory[j][idx].ref} key={idx} height={cell.height} width={cell.width} weight={cell.weight} val={cell.value} backgroundColor={cell.background} />
                                             return component;
                                         })
                                     }

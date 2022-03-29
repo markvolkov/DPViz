@@ -29,7 +29,7 @@ export default class Cell extends React.Component {
             bgColor = this.state.stateBg;
         }
         return (
-            <div className={'cell'} style={{width: this.props.width, height: this.props.height, backgroundColor: bgColor}}><p>{this.props.weight}</p><p>{this.state.val}</p></div>
+            <div><div className={'cell'} style={{width: this.props.width, height: this.props.height, backgroundColor: bgColor}}><p><span>{this.props.val}</span><span>{this.props.weight}</span></p></div></div>
         );
     }
 
